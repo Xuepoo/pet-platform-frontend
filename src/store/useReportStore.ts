@@ -19,8 +19,8 @@ interface ReportState {
   myReports: Report[];
   loading: boolean;
   error: string | null;
-  createReport: (reportData: any) => Promise<void>;
-  fetchReports: (filters?: any) => Promise<void>;
+  createReport: (reportData: Omit<Report, 'id' | 'status' | 'created_at' | 'user_id'>) => Promise<void>;
+  fetchReports: (filters?: Record<string, unknown>) => Promise<void>;
   fetchMyReports: () => Promise<void>;
   resolveReport: (reportId: string) => Promise<void>;
 }
@@ -36,8 +36,9 @@ export const useReportStore = create<ReportState>((set) => ({
     try {
       await api.post('/reports/', reportData);
       set({ loading: false });
-    } catch (error: any) {
-      set({ error: error.message || 'Failed to create report', loading: false });
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to create report';
+      set({ error: errorMessage, loading: false });
       throw error;
     }
   },
@@ -45,11 +46,15 @@ export const useReportStore = create<ReportState>((set) => ({
   fetchReports: async (filters = {}) => {
     set({ loading: true, error: null });
     try {
-      const params = new URLSearchParams(filters);
+      const params = new URLSearchParams();
+      Object.entries(filters).forEach(([key, value]) => {
+          if (value) params.append(key, String(value));
+      });
       const response = await api.get(`/reports/?${params.toString()}`);
       set({ reports: response.data, loading: false });
-    } catch (error: any) {
-      set({ error: error.message || 'Failed to fetch reports', loading: false });
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to fetch reports';
+      set({ error: errorMessage, loading: false });
     }
   },
 
@@ -58,8 +63,9 @@ export const useReportStore = create<ReportState>((set) => ({
     try {
       const response = await api.get('/reports/me');
       set({ myReports: response.data, loading: false });
-    } catch (error: any) {
-      set({ error: error.message || 'Failed to fetch my reports', loading: false });
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to fetch my reports';
+      set({ error: errorMessage, loading: false });
     }
   },
 
@@ -76,8 +82,9 @@ export const useReportStore = create<ReportState>((set) => ({
         ),
         loading: false,
       }));
-    } catch (error: any) {
-      set({ error: error.message || 'Failed to resolve report', loading: false });
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to resolve report';
+      set({ error: errorMessage, loading: false });
       throw error;
     }
   },

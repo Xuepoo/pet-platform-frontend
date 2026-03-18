@@ -19,7 +19,7 @@ interface PetState {
   selectedPet: Pet | null;
   loading: boolean;
   error: string | null;
-  fetchPets: (filters?: any) => Promise<void>;
+  fetchPets: (filters?: Record<string, unknown>) => Promise<void>;
   fetchPetById: (id: string) => Promise<void>;
 }
 
@@ -40,8 +40,9 @@ export const usePetStore = create<PetState>((set) => ({
 
       const response = await api.get(`/pets?${params.toString()}`);
       set({ pets: response.data, loading: false });
-    } catch (error: any) {
-      set({ error: error.message || 'Failed to fetch pets', loading: false });
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to fetch pets';
+      set({ error: errorMessage, loading: false });
     }
   },
 
@@ -50,8 +51,9 @@ export const usePetStore = create<PetState>((set) => ({
     try {
       const response = await api.get(`/pets/${id}`);
       set({ selectedPet: response.data, loading: false });
-    } catch (error: any) {
-      set({ error: error.message || 'Failed to fetch pet details', loading: false });
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to fetch pet details';
+      set({ error: errorMessage, loading: false });
     }
   }
 }));

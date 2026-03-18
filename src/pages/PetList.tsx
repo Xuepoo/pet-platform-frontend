@@ -14,7 +14,7 @@ const PetList = () => {
 
   useEffect(() => {
     fetchPets(filters);
-  }, [fetchPets]); // Intentionally not including filters to avoid loop, we'll handle filter submission manually or use debounce
+  }, [fetchPets, filters]); // Intentionally not including filters to avoid loop, we'll handle filter submission manually or use debounce
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();

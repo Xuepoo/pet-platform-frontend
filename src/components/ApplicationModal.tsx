@@ -27,7 +27,7 @@ const ApplicationModal = ({ petName, isOpen, onClose, onSubmit }: ApplicationMod
     try {
       await onSubmit(message);
       onClose();
-    } catch (err) {
+    } catch {
       setError('Failed to submit application. Please try again.');
     } finally {
       setIsSubmitting(false);

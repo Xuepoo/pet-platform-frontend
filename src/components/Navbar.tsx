@@ -1,20 +1,22 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../store/useAuthStore';
-import { LogOut, User, PawPrint } from 'lucide-react';
+import { LogOut, User, PawPrint, Sun, Moon } from 'lucide-react';
+import { useTheme } from '../context/ThemeContext';
 
 const Navbar = () => {
   const { t } = useTranslation();
   const { isAuthenticated, logout, user } = useAuthStore();
+  const { theme, setTheme } = useTheme();
 
   return (
-    <nav className="bg-white shadow-sm border-b border-gray-100">
+    <nav className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-100 dark:border-gray-700 transition-colors duration-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <Link to="/" className="flex-shrink-0 flex items-center gap-2">
-              <PawPrint className="h-8 w-8 text-indigo-600" />
-              <span className="font-bold text-xl text-gray-900">PetPlatform</span>
+              <PawPrint className="h-8 w-8 text-indigo-600 dark:text-indigo-400" />
+              <span className="font-bold text-xl text-gray-900 dark:text-white">PetPlatform</span>
             </Link>
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
               <Link
@@ -39,13 +41,20 @@ const Navbar = () => {
               )}
               <Link
                 to="/about"
-                className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+                className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-300 dark:hover:text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
               >
                 {t('About Us')}
               </Link>
             </div>
           </div>
           <div className="flex items-center gap-4">
+            <button
+              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+              className="p-2 rounded-full text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 focus:outline-none"
+              aria-label="Toggle Theme"
+            >
+              {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            </button>
             {isAuthenticated ? (
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2 text-sm text-gray-700">

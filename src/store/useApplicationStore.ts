@@ -31,8 +31,9 @@ export const useApplicationStore = create<ApplicationState>((set) => ({
     try {
       await api.post('/applications/', { pet_id: petId, message });
       set({ loading: false });
-    } catch (error: any) {
-      set({ error: error.message || 'Failed to submit application', loading: false });
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to submit application';
+      set({ error: errorMessage, loading: false });
       throw error;
     }
   },
@@ -42,8 +43,9 @@ export const useApplicationStore = create<ApplicationState>((set) => ({
     try {
       const response = await api.get('/applications/me');
       set({ applications: response.data, loading: false });
-    } catch (error: any) {
-      set({ error: error.message || 'Failed to fetch applications', loading: false });
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to fetch applications';
+      set({ error: errorMessage, loading: false });
     }
   },
 
@@ -52,8 +54,9 @@ export const useApplicationStore = create<ApplicationState>((set) => ({
     try {
       const response = await api.get(`/applications/pet/${petId}`);
       set({ applications: response.data, loading: false });
-    } catch (error: any) {
-      set({ error: error.message || 'Failed to fetch applications', loading: false });
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to fetch applications';
+      set({ error: errorMessage, loading: false });
     }
   },
 
@@ -64,12 +67,13 @@ export const useApplicationStore = create<ApplicationState>((set) => ({
       // Update local state
       set((state) => ({
         applications: state.applications.map((app) =>
-          app.id === appId ? { ...app, status: status as any } : app
+          app.id === appId ? { ...app, status: status as Application['status'] } : app
         ),
         loading: false,
       }));
-    } catch (error: any) {
-      set({ error: error.message || 'Failed to update application status', loading: false });
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to update application status';
+      set({ error: errorMessage, loading: false });
       throw error;
     }
   },

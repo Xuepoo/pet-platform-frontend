@@ -55,7 +55,7 @@ const CreateReport = () => {
             },
           });
           finalImageUrl = response.data.url;
-        } catch (err) {
+        } catch {
           setError('Failed to upload image. Please try again.');
           setUploading(false);
           return;
@@ -65,12 +65,13 @@ const CreateReport = () => {
 
       await createReport({
         ...formData,
+        report_type: formData.report_type as 'lost' | 'found',
         image_url: finalImageUrl,
       });
 
       navigate('/reports');
-    } catch (err: any) {
-      setError(err.message || 'Failed to create report');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Failed to create report');
     }
   };
 
