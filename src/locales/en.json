@@ -1,0 +1,81 @@
+{
+  "translation": {
+    "Home": "Home",
+    "About Us": "About Us",
+    "Find a Pet": "Find a Pet",
+    "Lost & Found": "Lost & Found",
+    "My Applications": "My Applications",
+    "Logout": "Logout",
+    "Login": "Login",
+    "Register": "Register",
+    "Profile": "Profile",
+    "Admin": "Admin",
+    "Theme": "Theme",
+    "Language": "Language",
+    "about": {
+      "title": "About Us",
+      "subtitle": "Connecting pets with loving homes and reuniting families.",
+      "mission": {
+        "title": "Our Mission",
+        "description": "At Pet Platform, we believe every pet deserves a loving home. Our mission is to simplify the adoption process and provide a reliable platform for reporting lost and found pets."
+      },
+      "team": {
+        "title": "Meet the Team",
+        "member1": { "name": "Sarah Johnson", "role": "Founder & CEO" },
+        "member2": { "name": "Michael Chen", "role": "Head of Operations" },
+        "member3": { "name": "Emily Rodriguez", "role": "Community Manager" }
+      },
+      "contact": {
+        "title": "Contact Us"
+      }
+    },
+    "admin": {
+      "dashboard": "Admin Dashboard",
+      "users": "Users",
+      "id": "ID",
+      "email": "Email",
+      "name": "Name",
+      "active": "Active",
+      "inactive": "Inactive",
+      "superuser": "Superuser",
+      "actions": "Actions",
+      "delete": "Delete",
+      "toggle_active": "Toggle Active",
+      "confirm_delete": "Are you sure you want to delete this user?"
+    },
+    "register": {
+      "title": "Create your account",
+      "subtitle": "Already have an account?",
+      "signin": "Sign in",
+      "name": "Full Name",
+      "email": "Email address",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "submit": "Sign up",
+      "loading": "Creating account...",
+      "passwordStrength": "Password Strength",
+      "weak": "Weak",
+      "medium": "Medium",
+      "strong": "Strong",
+      "errors": {
+        "mismatch": "Passwords do not match",
+        "weak": "Password must be at least 8 characters long",
+        "generic": "Registration failed. Please try again."
+      }
+    },
+    "profile": {
+      "title": "User Profile",
+      "edit": "Edit Profile",
+      "save": "Save Changes",
+      "cancel": "Cancel",
+      "name": "Full Name",
+      "email": "Email",
+      "age": "Age",
+      "gender": "Gender",
+      "bio": "Bio",
+      "avatar": "Avatar",
+      "upload_avatar": "Upload Avatar",
+      "uploading": "Uploading..."
+    }
+  }
+}

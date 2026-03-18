@@ -1,1 +1,18 @@
 @import "tailwindcss";
+@config "../tailwind.config.js";
+
+@layer base {
+  :root {
+    --radius: 0.5rem;
+  }
+
+  /* body {
+    @apply bg-surface text-text transition-colors duration-300;
+  } */
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}

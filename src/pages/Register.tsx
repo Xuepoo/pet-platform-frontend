@@ -1,12 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuthStore } from '../store/useAuthStore';
 import { Eye, EyeOff, Lock, Mail, UserPlus } from 'lucide-react';
-import api from '../services/api';
+import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
+import { Card } from '../components/ui/Card';
+import { Input } from '../components/ui/Input';
+import { Button } from '../components/ui/Button';
+import { slideUp } from '../utils/animations';
 
 const Register = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
-  const { login } = useAuthStore();
+  const { register } = useAuthStore();
   
   const [formData, setFormData] = useState({
     name: '',
@@ -18,6 +24,22 @@ const Register = () => {
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [passwordStrength, setPasswordStrength] = useState<'weak' | 'medium' | 'strong'>('weak');
+
+  useEffect(() => {
+    const pwd = formData.password;
+    if (pwd.length === 0) {
+        setPasswordStrength('weak');
+        return;
+    }
+    if (pwd.length < 8) {
+        setPasswordStrength('weak');
+    } else if (pwd.length < 12) {
+        setPasswordStrength('medium');
+    } else {
+        setPasswordStrength('strong');
+    }
+  }, [formData.password]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -26,8 +48,13 @@ const Register = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match');
+      setError(t('register.errors.mismatch'));
       return;
+    }
+
+    if (formData.password.length < 8) {
+        setError(t('register.errors.weak'));
+        return;
     }
 
     setLoading(true);
@@ -36,45 +63,76 @@ const Register = () => {
     try {
       await register(formData.name, formData.email, formData.password);
       navigate('/');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       console.error(err);
-      setError(err.response?.data?.detail || 'Registration failed. Please try again.');
+      setError(err.response?.data?.detail || t('register.errors.generic'));
     } finally {
       setLoading(false);
     }
   };
 
+  const getStrengthColor = () => {
+      if (formData.password.length === 0) return 'bg-gray-200';
+      switch (passwordStrength) {
+          case 'weak': return 'bg-red-500';
+          case 'medium': return 'bg-yellow-500';
+          case 'strong': return 'bg-green-500';
+          default: return 'bg-gray-200';
+      }
+  };
+
+  const getStrengthWidth = () => {
+      if (formData.password.length === 0) return 'w-0';
+      switch (passwordStrength) {
+          case 'weak': return 'w-1/3';
+          case 'medium': return 'w-2/3';
+          case 'strong': return 'w-full';
+          default: return 'w-0';
+      }
+  };
+
   return (
-    <div className="flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-md border border-gray-100">
+    <div className="flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8 min-h-screen bg-gray-50">
+      <Card 
+        className="max-w-md w-full space-y-8 p-8"
+        variants={slideUp}
+        initial="initial"
+        animate="animate"
+        exit="exit"
+      >
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Create your account
+            {t('register.title')}
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            Already have an account?{' '}
+            {t('register.subtitle')}{' '}
             <Link to="/login" className="font-medium text-indigo-600 hover:text-indigo-500 transition-colors">
-              Sign in
+              {t('register.signin')}
             </Link>
           </p>
         </div>
         
         {error && (
-          <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-4 rounded-r-md animate-pulse">
+          <motion.div 
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            className="bg-red-50 border-l-4 border-red-500 p-4 mb-4 rounded-r-md"
+          >
             <p className="text-red-700 text-sm font-medium">{error}</p>
-          </div>
+          </motion.div>
         )}
 
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="rounded-md shadow-sm -space-y-px">
+          <div className="space-y-4">
             <div className="relative">
               <label htmlFor="name" className="sr-only">
-                Full Name
+                {t('register.name')}
               </label>
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 z-10">
                 <UserPlus className="h-5 w-5" />
               </div>
-              <input
+              <Input
                 id="name"
                 name="name"
                 type="text"
@@ -82,37 +140,39 @@ const Register = () => {
                 required
                 value={formData.name}
                 onChange={handleChange}
-                className="appearance-none rounded-none relative block w-full px-10 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Full Name"
+                className="pl-10"
+                placeholder={t('register.name')}
               />
             </div>
+            
             <div className="relative">
-              <label htmlFor="email-address" className="sr-only">
-                Email address
+              <label htmlFor="email" className="sr-only">
+                {t('register.email')}
               </label>
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 z-10">
                 <Mail className="h-5 w-5" />
               </div>
-              <input
-                id="email-address"
+              <Input
+                id="email"
                 name="email"
                 type="email"
                 autoComplete="email"
                 required
                 value={formData.email}
                 onChange={handleChange}
-                className="appearance-none rounded-none relative block w-full px-10 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Email address"
+                className="pl-10"
+                placeholder={t('register.email')}
               />
             </div>
+
             <div className="relative">
               <label htmlFor="password" className="sr-only">
-                Password
+                {t('register.password')}
               </label>
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 z-10">
                 <Lock className="h-5 w-5" />
               </div>
-              <input
+              <Input
                 id="password"
                 name="password"
                 type={showPassword ? 'text' : 'password'}
@@ -120,45 +180,58 @@ const Register = () => {
                 required
                 value={formData.password}
                 onChange={handleChange}
-                className="appearance-none rounded-none relative block w-full px-10 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Password"
+                className="pl-10 pr-10"
+                placeholder={t('register.password')}
               />
                <button
                 type="button"
-                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none"
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none z-10"
                 onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
               </button>
             </div>
+
+            {/* Password Strength Indicator */}
+            {formData.password.length > 0 && (
+                <div className="mt-1">
+                    <div className="h-2 w-full bg-gray-200 rounded-full overflow-hidden">
+                        <div 
+                            className={`h-full transition-all duration-300 ${getStrengthColor()} ${getStrengthWidth()}`}
+                        />
+                    </div>
+                    <p className="text-xs text-gray-500 mt-1 text-right">
+                        {t(`register.${passwordStrength}`)}
+                    </p>
+                </div>
+            )}
+
             <div className="relative">
-              <label htmlFor="confirm-password" className="sr-only">
-                Confirm Password
+              <label htmlFor="confirmPassword" className="sr-only">
+                {t('register.confirmPassword')}
               </label>
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 z-10">
                 <Lock className="h-5 w-5" />
               </div>
-              <input
-                id="confirm-password"
+              <Input
+                id="confirmPassword"
                 name="confirmPassword"
                 type={showPassword ? 'text' : 'password'}
                 autoComplete="new-password"
                 required
                 value={formData.confirmPassword}
                 onChange={handleChange}
-                className="appearance-none rounded-none relative block w-full px-10 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Confirm Password"
+                className="pl-10"
+                placeholder={t('register.confirmPassword')}
               />
             </div>
           </div>
 
           <div>
-            <button
+            <Button
               type="submit"
               disabled={loading}
-              className={`group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white ${
-                loading ? 'bg-indigo-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700'
-              } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors`}
+              className="w-full"
             >
               {loading ? (
                 <span className="flex items-center gap-2">
@@ -166,15 +239,15 @@ const Register = () => {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
-                  Creating account...
+                  {t('register.loading')}
                 </span>
               ) : (
-                'Sign up'
+                t('register.submit')
               )}
-            </button>
+            </Button>
           </div>
         </form>
-      </div>
+      </Card>
     </div>
   );
 };

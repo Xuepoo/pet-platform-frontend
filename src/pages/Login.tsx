@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuthStore } from '../store/useAuthStore';
 import { Eye, EyeOff, Lock, User } from 'lucide-react';
-import api from '../services/api';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -24,6 +23,7 @@ const Login = () => {
     try {
       await login(email, password);
       navigate(from, { replace: true });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       console.error(err);
       setError(err.response?.data?.detail || 'Login failed. Please check your credentials.');
