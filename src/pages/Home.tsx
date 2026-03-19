@@ -1,44 +1,24 @@
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import { useEffect } from 'react';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
 import { fadeIn, slideUp, staggerContainer } from '../utils/animations';
+import { usePetStore } from '../store/usePetStore';
 
 const Home = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { pets, fetchPets, loading } = usePetStore();
 
-  const featuredPets = [
-    {
-      id: 1,
-      name: 'Luna',
-      breed: 'Golden Retriever',
-      age: '2 years',
-      image: 'https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&q=80&w=612',
-    },
-    {
-      id: 2,
-      name: 'Milo',
-      breed: 'Tabby Cat',
-      age: '1 year',
-      image: 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&q=80&w=500',
-    },
-    {
-      id: 3,
-      name: 'Rocky',
-      breed: 'German Shepherd',
-      age: '3 years',
-      image: 'https://images.unsplash.com/photo-1589941013453-ec89f33b5e95?auto=format&fit=crop&q=80&w=500',
-    },
-    {
-      id: 4,
-      name: 'Bella',
-      breed: 'Beagle',
-      age: '6 months',
-      image: 'https://images.unsplash.com/photo-1537151608828-ea2b11777ee8?auto=format&fit=crop&q=80&w=500',
-    }
-  ];
+  useEffect(() => {
+    // Fetch featured pets (available ones)
+    fetchPets({ status: 'available' });
+  }, [fetchPets]);
+
+  // Use the first 4 available pets as featured
+  const featuredPets = pets.slice(0, 4);
 
   return (
     <motion.div 
@@ -48,7 +28,7 @@ const Home = () => {
       animate="animate"
     >
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-primary-50 dark:bg-gray-800 py-20 sm:py-32">
+      <section className="relative overflow-hidden bg-amber-50 dark:bg-gray-800 py-20 sm:py-32">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div 
             className="text-center max-w-3xl mx-auto"
@@ -56,7 +36,7 @@ const Home = () => {
           >
             <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white sm:text-5xl md:text-6xl mb-6">
               <span className="block">{t('home.hero.titlePart1', 'Find Your Perfect')}</span>
-              <span className="block text-primary-600 dark:text-primary-400">{t('home.hero.titlePart2', 'Companion Today')}</span>
+              <span className="block text-amber-600 dark:text-amber-400">{t('home.hero.titlePart2', 'Companion Today')}</span>
             </h1>
             <p className="mt-4 max-w-xl mx-auto text-xl text-gray-500 dark:text-gray-300 mb-8">
               {t('home.hero.description', 'Give a loving home to a pet in need. Browse our available pets and start your adoption journey today.')}
@@ -65,7 +45,7 @@ const Home = () => {
               <Button 
                 size="lg" 
                 onClick={() => navigate('/pets')}
-                className="w-full sm:w-auto text-lg px-8 py-6"
+                className="w-full sm:w-auto text-lg px-8 py-6 bg-amber-600 hover:bg-amber-700 text-white"
               >
                 {t('home.hero.browseBtn', 'Browse Pets')}
               </Button>
@@ -73,7 +53,7 @@ const Home = () => {
                 variant="outline" 
                 size="lg" 
                 onClick={() => navigate('/register')}
-                className="w-full sm:w-auto text-lg px-8 py-6"
+                className="w-full sm:w-auto text-lg px-8 py-6 border-amber-600 text-amber-600 hover:bg-amber-50 dark:hover:bg-gray-700"
               >
                 {t('home.hero.joinBtn', 'Join Us')}
               </Button>
@@ -83,9 +63,9 @@ const Home = () => {
         
         {/* Decorative background elements */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-0 opacity-10 pointer-events-none">
-          <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary-400 rounded-full mix-blend-multiply filter blur-3xl animate-blob"></div>
-          <div className="absolute top-0 right-1/4 w-96 h-96 bg-purple-400 rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-2000"></div>
-          <div className="absolute -bottom-32 left-1/3 w-96 h-96 bg-pink-400 rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-4000"></div>
+          <div className="absolute top-0 left-1/4 w-96 h-96 bg-amber-400 rounded-full mix-blend-multiply filter blur-3xl animate-blob opacity-20"></div>
+          <div className="absolute top-0 right-1/4 w-96 h-96 bg-orange-400 rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-2000 opacity-20"></div>
+          <div className="absolute -bottom-32 left-1/3 w-96 h-96 bg-yellow-400 rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-4000 opacity-20"></div>
         </div>
       </section>
 
@@ -104,44 +84,54 @@ const Home = () => {
             </p>
           </motion.div>
 
-          <motion.div 
-            className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4"
-            variants={staggerContainer}
-          >
-            {featuredPets.map((pet) => (
-              <Card 
-                key={pet.id} 
-                className="flex flex-col h-full bg-white dark:bg-gray-800 border-none shadow-lg hover:shadow-xl transition-shadow duration-300"
-                variants={slideUp}
-                initial="initial"
-                animate="animate"
-              >
-                <div className="relative aspect-square overflow-hidden bg-gray-200">
-                  <img 
-                    src={pet.image} 
-                    alt={pet.name} 
-                    className="object-cover w-full h-full transition-transform duration-300 hover:scale-105"
-                  />
-                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
-                    <h3 className="text-xl font-bold text-white">{pet.name}</h3>
+          {loading ? (
+             <div className="flex justify-center items-center py-20">
+               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600"></div>
+             </div>
+          ) : (
+            <motion.div 
+              className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4"
+              variants={staggerContainer}
+            >
+              {featuredPets.map((pet) => (
+                <Card 
+                  key={pet.id} 
+                  className="flex flex-col h-full bg-white dark:bg-gray-800 border-none shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden"
+                  variants={slideUp}
+                  initial="initial"
+                  animate="animate"
+                >
+                  <div className="relative aspect-square overflow-hidden bg-gray-200">
+                    {pet.image_url ? (
+                      <img 
+                        src={pet.image_url} 
+                        alt={pet.name} 
+                        className="object-cover w-full h-full transition-transform duration-300 hover:scale-105"
+                      />
+                    ) : (
+                      <div className="flex items-center justify-center w-full h-full text-4xl">🐾</div>
+                    )}
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
+                      <h3 className="text-xl font-bold text-white">{pet.name}</h3>
+                    </div>
                   </div>
-                </div>
-                <div className="p-4 flex-1 flex flex-col justify-between">
-                  <div>
-                    <p className="text-sm text-primary-600 dark:text-primary-400 font-medium">{pet.breed}</p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{pet.age}</p>
+                  <div className="p-4 flex-1 flex flex-col justify-between">
+                    <div>
+                      <p className="text-sm text-amber-600 dark:text-amber-400 font-medium">{pet.breed}</p>
+                      <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{pet.age} {t('profile.age', 'years')}</p>
+                    </div>
+                    <Button 
+                      variant="secondary" 
+                      className="w-full mt-4 bg-amber-100 text-amber-800 hover:bg-amber-200 dark:bg-amber-900/30 dark:text-amber-300"
+                      onClick={() => navigate(`/pets/${pet.id}`)}
+                    >
+                      {t('home.featured.meetBtn', 'Meet') + ' ' + pet.name}
+                    </Button>
                   </div>
-                  <Button 
-                    variant="secondary" 
-                    className="w-full mt-4"
-                    onClick={() => navigate(`/pets/${pet.id}`)}
-                  >
-                    {t('home.featured.meetBtn', 'Meet') + ' ' + pet.name}
-                  </Button>
-                </div>
-              </Card>
-            ))}
-          </motion.div>
+                </Card>
+              ))}
+            </motion.div>
+          )}
 
           <motion.div 
             className="mt-12 text-center"
@@ -150,7 +140,7 @@ const Home = () => {
             <Button 
               variant="link" 
               onClick={() => navigate('/pets')}
-              className="text-lg text-primary-600 hover:text-primary-700"
+              className="text-lg text-amber-600 hover:text-amber-700"
             >
               {t('home.featured.viewAll', 'View all available pets')} &rarr;
             </Button>

@@ -8,10 +8,11 @@ export interface Pet {
   breed: string;
   age: number;
   description: string;
-  imageUrl?: string;
+  image_url?: string;
   status: 'available' | 'adopted' | 'pending';
   gender: 'male' | 'female';
   size: 'small' | 'medium' | 'large';
+  is_favorited?: boolean;
 }
 
 interface PetState {
@@ -21,9 +22,10 @@ interface PetState {
   error: string | null;
   fetchPets: (filters?: Record<string, unknown>) => Promise<void>;
   fetchPetById: (id: string) => Promise<void>;
+  toggleFavorite: (petId: string) => Promise<void>;
 }
 
-export const usePetStore = create<PetState>((set) => ({
+export const usePetStore = create<PetState>((set, get) => ({
   pets: [],
   selectedPet: null,
   loading: false,
@@ -54,6 +56,26 @@ export const usePetStore = create<PetState>((set) => ({
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to fetch pet details';
       set({ error: errorMessage, loading: false });
+    }
+  },
+
+  toggleFavorite: async (petId: string) => {
+    try {
+      const response = await api.post(`/pets/${petId}/favorite`);
+      const isFavorited = response.data; // true (favorited) or false (unfavorited)
+      
+      // Update local state
+      set((state) => ({
+        pets: state.pets.map((p) => 
+          String(p.id) === String(petId) ? { ...p, is_favorited: isFavorited } : p
+        ),
+        selectedPet: state.selectedPet && String(state.selectedPet.id) === String(petId)
+          ? { ...state.selectedPet, is_favorited: isFavorited } 
+          : state.selectedPet
+      }));
+    } catch (error: unknown) {
+      console.error('Failed to toggle favorite:', error);
+      throw error;
     }
   }
 }));

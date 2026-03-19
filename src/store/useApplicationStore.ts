@@ -9,6 +9,12 @@ export interface Application {
   message: string;
   created_at: string;
   updated_at?: string;
+  pet?: {
+    name: string;
+    image_url?: string;
+    species: string;
+    breed: string;
+  };
 }
 
 interface ApplicationState {
@@ -41,7 +47,7 @@ export const useApplicationStore = create<ApplicationState>((set) => ({
   fetchMyApplications: async () => {
     set({ loading: true, error: null });
     try {
-      const response = await api.get('/applications/me');
+      const response = await api.get('/applications/');
       set({ applications: response.data, loading: false });
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to fetch applications';

@@ -266,6 +266,11 @@ export default function PostDetailPage() {
                     <textarea
                       value={commentText}
                       onChange={(e) => setCommentText(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.ctrlKey && e.key === 'Enter') {
+                          handleCommentSubmit(e);
+                        }
+                      }}
                       placeholder={t('feed.postDetail.writeComment')}
                       rows={3}
                       className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all resize-none text-gray-900 dark:text-white"

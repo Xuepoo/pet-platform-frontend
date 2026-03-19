@@ -97,6 +97,8 @@
       "name": "Full Name",
       "email": "Email",
       "age": "Age",
+      "birthdate": "Birth Date",
+      "birthdate_placeholder": "Select your birth date",
       "gender": "Gender",
       "bio": "Bio",
       "avatar": "Avatar",
@@ -117,7 +119,9 @@
       "available": "Available",
       "adopted": "Adopted",
       "pending": "Pending",
-      "learnMore": "Learn More"
+      "learnMore": "Learn More",
+      "allStatuses": "All Statuses",
+      "noPetsFound": "No pets found matching your criteria"
     },
     "feed": {
       "title": "Pet Community",
@@ -142,7 +146,9 @@
         "preview": "Preview",
         "noContent": "*No content yet*",
         "markdownGuide": "Markdown Quick Reference",
-        "contentRequired": "Content is required"
+        "contentRequired": "Content is required",
+        "images": "Images",
+        "addImage": "Add Image"
       },
       "postDetail": {
         "notFound": "Post not found",
@@ -166,6 +172,53 @@
       "found": "Found",
       "resolved": "Resolved",
       "open": "Open"
+    },
+    "applications": {
+      "title": "My Adoption Applications",
+      "subtitle": "Track the status of your adoption requests",
+      "loginRequired": "Please log in to view your applications",
+      "goToLogin": "Go to Login",
+      "noApplications": "No applications yet",
+      "findPet": "Find a pet you love and apply for adoption!",
+      "browsePets": "Browse Pets",
+      "petId": "Application for Pet ID",
+      "message": "Your Message",
+      "submittedOn": "Submitted On",
+      "status": {
+        "pending": "Pending",
+        "approved": "Approved",
+        "rejected": "Rejected"
+      }
+    },
+    "petDetail": {
+      "notFound": "Pet not found",
+      "backToAll": "Back to all pets",
+      "about": "About",
+      "age": "Age",
+      "years": "years",
+      "gender": "Gender",
+      "size": "Size",
+      "status": "Status",
+      "interested": "Interested in",
+      "submitted": "Application Submitted!",
+      "weWillContact": "We'll be in touch soon.",
+      "submitting": "Submitting...",
+      "apply": "Apply for Adoption",
+      "notAvailable": "Not Available",
+      "loginRequired": "Please log in to apply for adoption.",
+      "loginToAdopt": "Log In to Adopt",
+      "location": "Available at Main Shelter",
+      "health": "Vaccinated & Neutered",
+      "modal": {
+        "adopt": "Adopt",
+        "intro": "Please tell us a bit about yourself and why you'd be a great home for",
+        "placeholder": "I have a fenced yard and...",
+        "errorEmpty": "Please provide a message explaining why you want to adopt.",
+        "errorSubmit": "Failed to submit application. Please try again.",
+        "cancel": "Cancel",
+        "submit": "Submit Application",
+        "submitting": "Submitting..."
+      }
     }
   }
 }

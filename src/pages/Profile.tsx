@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { User, Mail, Calendar, UserCircle, FileText, Camera, Save, X, Edit2 } from 'lucide-react';
 import { useAuthStore } from '../store/useAuthStore';
-// import api from '../services/api';
+import api from '../services/api';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
@@ -15,6 +15,7 @@ const Profile = () => {
   const [formData, setFormData] = useState({
     full_name: '',
     age: '',
+    birthdate: '',
     gender: '',
     bio: '',
     avatar: '',
@@ -26,6 +27,7 @@ const Profile = () => {
       setFormData({
         full_name: user.full_name || '',
         age: user.age ? user.age.toString() : '',
+        birthdate: user.birthdate || '',
         gender: user.gender || '',
         bio: user.bio || '',
         avatar: user.avatar || '',
@@ -47,13 +49,13 @@ const Profile = () => {
 
     try {
       // Mock upload or actual endpoint
-      // const response = await api.post('/upload', uploadData, {
-      //   headers: { 'Content-Type': 'multipart/form-data' },
-      // });
-      // const avatarUrl = response.data.url;
+      const response = await api.post('/upload/', uploadData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      const avatarUrl = response.data.url;
       
       // For now, we'll just mock it with a local URL for preview
-      const avatarUrl = URL.createObjectURL(file);
+      // const avatarUrl = URL.createObjectURL(file);
       
       setFormData(prev => ({ ...prev, avatar: avatarUrl }));
       
@@ -76,18 +78,14 @@ const Profile = () => {
       // Convert age to number
       const payload = {
         ...formData,
-        age: formData.age ? parseInt(formData.age) : undefined,
+        age: undefined, // Removed age
       };
       
       // Mock API call
-      // await api.put('/users/me', payload);
+      await api.put('/users/me', payload);
       
       // Update local store
-      updateUser({
-        ...payload,
-        // If age was undefined in payload, we might want to keep it undefined
-        age: payload.age
-      });
+      updateUser(payload);
       
       setIsEditing(false);
     } catch (error) {
@@ -102,15 +100,16 @@ const Profile = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-3xl">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <Card className="p-0 overflow-hidden bg-white dark:bg-gray-800 shadow-xl rounded-2xl">
-          {/* Header / Cover */}
-          <div className="h-32 bg-gradient-to-r from-blue-500 to-purple-600 relative"></div>
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-8">
+      <div className="container mx-auto px-4 max-w-3xl">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <Card className="p-0 overflow-hidden bg-white dark:bg-gray-800 shadow-xl rounded-2xl border border-gray-100 dark:border-gray-700">
+            {/* Header / Cover */}
+            <div className="h-32 bg-gradient-to-r from-amber-400 via-orange-500 to-rose-500 relative"></div>
           
           <div className="px-8 pb-8">
             <div className="relative flex justify-between items-end -mt-12 mb-6">
@@ -163,6 +162,7 @@ const Profile = () => {
                         setFormData({
                           full_name: user.full_name || '',
                           age: user.age ? user.age.toString() : '',
+                          birthdate: user.birthdate || '',
                           gender: user.gender || '',
                           bio: user.bio || '',
                           avatar: user.avatar || '',
@@ -205,14 +205,14 @@ const Profile = () => {
                       
                       <div className="space-y-2">
                         <label className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-2">
-                          <Calendar size={16} /> {t('profile.age', 'Age')}
+                          <Calendar size={16} /> {t('profile.birthdate', 'Birth Date')}
                         </label>
                         <Input
-                          name="age"
-                          type="number"
-                          value={formData.age}
+                          name="birthdate"
+                          type="date"
+                          value={formData.birthdate}
                           onChange={handleChange}
-                          placeholder={t('profile.age_placeholder', 'Enter your age')}
+                          placeholder={t('profile.birthdate_placeholder', 'Select your birth date')}
                         />
                       </div>
 
@@ -276,10 +276,10 @@ const Profile = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg">
                         <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">
-                          {t('profile.age', 'Age')}
+                          {t('profile.birthdate', 'Birth Date')}
                         </h3>
                         <p className="text-lg font-medium text-gray-900 dark:text-white">
-                          {user.age || '-'}
+                          {user.birthdate || '-'}
                         </p>
                       </div>
                       <div className="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg">
@@ -307,6 +307,7 @@ const Profile = () => {
           </div>
         </Card>
       </motion.div>
+      </div>
     </div>
   );
 };

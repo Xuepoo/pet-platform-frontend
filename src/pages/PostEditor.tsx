@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Send, Loader2 } from 'lucide-react';
+import { ArrowLeft, Send, Loader2, Image as ImageIcon, X } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import postService, { type PostCreate } from '../services/postService';
@@ -9,11 +9,32 @@ import ReactMarkdown from 'react-markdown';
 export default function PostEditor() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [previews, setPreviews] = useState<string[]>([]);
   const [showPreview, setShowPreview] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const newFiles = Array.from(e.target.files);
+      setSelectedFiles((prev) => [...prev, ...newFiles]);
+      
+      const newPreviews = newFiles.map((file) => URL.createObjectURL(file));
+      setPreviews((prev) => [...prev, ...newPreviews]);
+    }
+  };
+
+  const removeFile = (index: number) => {
+    setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
+    setPreviews((prev) => {
+      URL.revokeObjectURL(prev[index]);
+      return prev.filter((_, i) => i !== index);
+    });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,6 +46,8 @@ export default function PostEditor() {
     try {
       setLoading(true);
       setError('');
+      
+      // 1. Create Post
       const postData: PostCreate = {
         content: content.trim(),
       };
@@ -32,8 +55,17 @@ export default function PostEditor() {
         postData.title = title.trim();
       }
       const newPost = await postService.createPost(postData);
+
+      // 2. Upload Media if any
+      if (selectedFiles.length > 0) {
+        await Promise.all(
+          selectedFiles.map((file) => postService.uploadMedia(newPost.id, file))
+        );
+      }
+
       navigate(`/posts/${newPost.id}`);
     } catch (err: any) {
+      console.error(err);
       setError(err.response?.data?.detail || 'Failed to create post');
     } finally {
       setLoading(false);
@@ -116,6 +148,11 @@ export default function PostEditor() {
                     id="content"
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.ctrlKey && e.key === 'Enter') {
+                        handleSubmit(e);
+                      }
+                    }}
                     rows={12}
                     placeholder={t('feed.postEditor.contentPlaceholder')}
                     className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all resize-none text-gray-900 dark:text-white"
@@ -124,6 +161,52 @@ export default function PostEditor() {
                 <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
                   {t('feed.postEditor.markdownSupport')}
                 </p>
+              </div>
+
+              {/* Media Upload */}
+              <div>
+                <div className="flex items-center gap-2 mb-2">
+                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    {t('feed.postEditor.images', 'Images')}
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="p-2 text-gray-500 hover:text-amber-500 hover:bg-amber-50 dark:hover:bg-gray-700 rounded-full transition-colors"
+                    title={t('feed.postEditor.addImage', 'Add Image')}
+                  >
+                    <ImageIcon className="w-5 h-5" />
+                  </button>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    onChange={handleFileSelect}
+                    className="hidden"
+                  />
+                </div>
+
+                {previews.length > 0 && (
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-2">
+                    {previews.map((preview, index) => (
+                      <div key={index} className="relative group aspect-square">
+                        <img
+                          src={preview}
+                          alt={`Preview ${index}`}
+                          className="w-full h-full object-cover rounded-lg border border-gray-200 dark:border-gray-700"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeFile(index)}
+                          className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
               {/* Actions */}

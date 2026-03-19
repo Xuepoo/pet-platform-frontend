@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { usePetStore } from '../store/usePetStore';
 import PetCard from '../components/PetCard';
 import { Search, Filter } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const PetList = () => {
+  const { t } = useTranslation();
   const { pets, loading, error, fetchPets } = usePetStore();
   const [filters, setFilters] = useState({
     species: '',
@@ -29,7 +31,7 @@ const PetList = () => {
 
   return (
     <div className="space-y-6">
-      <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+      <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700">
         <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
           <form onSubmit={handleSearch} className="relative w-full md:w-96">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
@@ -37,8 +39,8 @@ const PetList = () => {
             </div>
             <input
               type="text"
-              placeholder="Search pets..."
-              className="pl-10 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-2 border"
+              placeholder={t('pets.search')}
+              className="pl-10 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-amber-500 focus:ring-amber-500 sm:text-sm py-2 border"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -51,13 +53,13 @@ const PetList = () => {
                 name="species"
                 value={filters.species}
                 onChange={handleFilterChange}
-                className="block w-full rounded-md border-gray-300 py-2 pl-3 pr-8 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm border"
+                className="block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white py-2 pl-3 pr-8 text-base focus:border-amber-500 focus:outline-none focus:ring-amber-500 sm:text-sm border"
               >
-                <option value="">All Species</option>
-                <option value="dog">Dog</option>
-                <option value="cat">Cat</option>
-                <option value="bird">Bird</option>
-                <option value="other">Other</option>
+                <option value="">{t('pets.filter.all')}</option>
+                <option value="dog">{t('pets.filter.dogs')}</option>
+                <option value="cat">{t('pets.filter.cats')}</option>
+                <option value="bird">{t('pets.filter.birds')}</option>
+                <option value="other">{t('pets.filter.other')}</option>
               </select>
             </div>
              <div className="min-w-[140px]">
@@ -65,12 +67,12 @@ const PetList = () => {
                 name="status"
                 value={filters.status}
                 onChange={handleFilterChange}
-                className="block w-full rounded-md border-gray-300 py-2 pl-3 pr-8 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm border"
+                className="block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white py-2 pl-3 pr-8 text-base focus:border-amber-500 focus:outline-none focus:ring-amber-500 sm:text-sm border"
               >
-                <option value="">All Statuses</option>
-                <option value="available">Available</option>
-                <option value="adopted">Adopted</option>
-                <option value="pending">Pending</option>
+                <option value="">{t('pets.allStatuses')}</option>
+                <option value="available">{t('pets.available')}</option>
+                <option value="adopted">{t('pets.adopted')}</option>
+                <option value="pending">{t('pets.pending')}</option>
               </select>
             </div>
           </div>
@@ -79,10 +81,10 @@ const PetList = () => {
 
       {loading ? (
         <div className="flex justify-center items-center py-20">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-500"></div>
         </div>
       ) : error ? (
-        <div className="text-center text-red-500 py-10 bg-red-50 rounded-lg">
+        <div className="text-center text-red-500 py-10 bg-red-50 dark:bg-red-900/20 rounded-lg">
           <p>{error}</p>
         </div>
       ) : (
@@ -92,8 +94,8 @@ const PetList = () => {
               <PetCard key={pet.id} pet={pet} />
             ))
           ) : (
-             <div className="col-span-full text-center py-20 text-gray-500">
-                <p className="text-xl">No pets found matching your criteria.</p>
+             <div className="col-span-full text-center py-20 text-gray-500 dark:text-gray-400">
+                <p className="text-xl">{t('pets.noPetsFound')}</p>
              </div>
           )}
         </div>

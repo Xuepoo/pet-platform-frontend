@@ -9,6 +9,7 @@ export interface User {
   is_superuser: boolean;
   full_name?: string;
   age?: number;
+  birthdate?: string;
   gender?: string;
   bio?: string;
   avatar?: string;

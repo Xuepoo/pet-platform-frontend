@@ -97,6 +97,8 @@
       "name": "全名",
       "email": "邮箱",
       "age": "年龄",
+      "birthdate": "出生日期",
+      "birthdate_placeholder": "选择出生日期",
       "gender": "性别",
       "bio": "简介",
       "avatar": "头像",
@@ -114,10 +116,12 @@
         "birds": "鸟类",
         "other": "其他"
       },
+      "allStatuses": "全部状态",
       "available": "可领养",
       "adopted": "已领养",
       "pending": "待定",
-      "learnMore": "了解更多"
+      "learnMore": "了解更多",
+      "noPetsFound": "未找到符合条件的宠物"
     },
     "feed": {
       "title": "宠物社区",
@@ -142,7 +146,9 @@
         "preview": "预览",
         "noContent": "*暂无内容*",
         "markdownGuide": "Markdown 快速参考",
-        "contentRequired": "内容不能为空"
+        "contentRequired": "内容不能为空",
+        "images": "图片",
+        "addImage": "添加图片"
       },
       "postDetail": {
         "notFound": "动态不存在",
@@ -166,6 +172,53 @@
       "found": "发现",
       "resolved": "已解决",
       "open": "进行中"
+    },
+    "applications": {
+      "title": "我的领养申请",
+      "subtitle": "追踪您的领养申请状态",
+      "loginRequired": "请登录以查看您的申请",
+      "goToLogin": "前往登录",
+      "noApplications": "暂无申请",
+      "findPet": "寻找您喜爱的宠物并申请领养！",
+      "browsePets": "浏览宠物",
+      "petId": "申请领养宠物 ID",
+      "message": "您的留言",
+      "submittedOn": "提交时间",
+      "status": {
+        "pending": "待审核",
+        "approved": "已批准",
+        "rejected": "已拒绝"
+      }
+    },
+    "petDetail": {
+      "notFound": "未找到宠物",
+      "backToAll": "返回所有宠物",
+      "about": "关于",
+      "age": "年龄",
+      "years": "岁",
+      "gender": "性别",
+      "size": "体型",
+      "status": "状态",
+      "interested": "对 Ta 感兴趣？",
+      "submitted": "申请已提交！",
+      "weWillContact": "我们会尽快联系您。",
+      "submitting": "提交中...",
+      "apply": "申请领养",
+      "notAvailable": "暂不可领养",
+      "loginRequired": "请登录后申请领养。",
+      "loginToAdopt": "登录以领养",
+      "location": "位于主收容所",
+      "health": "已驱虫绝育",
+      "modal": {
+        "adopt": "领养",
+        "intro": "请告诉我们要领养的理由以及您的家庭情况。",
+        "placeholder": "我想领养是因为...",
+        "errorEmpty": "请填写申请理由。",
+        "errorSubmit": "提交申请失败，请重试。",
+        "cancel": "取消",
+        "submit": "提交申请",
+        "submitting": "提交中..."
+      }
     }
   }
 }
