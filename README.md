@@ -14,7 +14,6 @@ This is the user-facing interface for the Pet Platform, allowing users to browse
     ```bash
     cd frontend
     pnpm install
-    # or npm install / yarn install
     ```
 
 ## Configuration
