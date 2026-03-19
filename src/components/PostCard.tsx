@@ -1,20 +1,44 @@
 import { motion } from 'framer-motion';
-import { Heart, MessageCircle, Share2, MoreHorizontal, User } from 'lucide-react';
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Heart, MessageCircle, Share2, MoreHorizontal, User, Edit2, Trash2 } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
 import type { Post } from '../services/postService';
+import postService from '../services/postService';
 import { formatDistanceToNow } from 'date-fns';
+import { useAuthStore } from '../store/useAuthStore';
 
 interface PostCardProps {
   post: Post;
   onLike: () => void;
   onUnlike: () => void;
+  onDelete?: () => void;
 }
 
-export default function PostCard({ post, onLike, onUnlike }: PostCardProps) {
+export default function PostCard({ post, onLike, onUnlike, onDelete }: PostCardProps) {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const { user } = useAuthStore();
   const [isLiked, setIsLiked] = useState(post.is_liked);
   const [likesCount, setLikesCount] = useState(post.likes_count);
+  const [showMenu, setShowMenu] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+  
+  // Compare as strings to handle type mismatch (user.id is string, author_id is number)
+  const isOwner = user?.id?.toString() === post.author_id?.toString();
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setShowMenu(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const handleLike = async () => {
     if (isLiked) {
@@ -25,6 +49,27 @@ export default function PostCard({ post, onLike, onUnlike }: PostCardProps) {
       setIsLiked(true);
       setLikesCount(prev => prev + 1);
       await onLike();
+    }
+  };
+
+  const handleEdit = () => {
+    setShowMenu(false);
+    navigate(`/posts/${post.id}/edit`);
+  };
+
+  const handleDelete = async () => {
+    if (!confirm(t('feed.confirmDelete', '确定要删除这条动态吗？'))) {
+      return;
+    }
+    try {
+      setDeleting(true);
+      await postService.deletePost(post.id);
+      setShowMenu(false);
+      onDelete?.();
+    } catch (error) {
+      console.error('Failed to delete post:', error);
+    } finally {
+      setDeleting(false);
     }
   };
 
@@ -57,9 +102,38 @@ export default function PostCard({ post, onLike, onUnlike }: PostCardProps) {
             <p className="text-sm text-gray-500 dark:text-gray-400">{timeAgo}</p>
           </div>
         </Link>
-        <button className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors">
-          <MoreHorizontal className="w-5 h-5 text-gray-500 dark:text-gray-400" />
-        </button>
+        
+        {/* Dropdown Menu */}
+        {isOwner && (
+          <div className="relative" ref={menuRef}>
+            <button 
+              onClick={() => setShowMenu(!showMenu)}
+              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
+            >
+              <MoreHorizontal className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+            </button>
+            
+            {showMenu && (
+              <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-10">
+                <button
+                  onClick={handleEdit}
+                  className="w-full px-4 py-2 text-left text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
+                >
+                  <Edit2 className="w-4 h-4" />
+                  {t('feed.edit', '编辑')}
+                </button>
+                <button
+                  onClick={handleDelete}
+                  disabled={deleting}
+                  className="w-full px-4 py-2 text-left text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center gap-2 disabled:opacity-50"
+                >
+                  <Trash2 className="w-4 h-4" />
+                  {deleting ? t('feed.deleting', '删除中...') : t('feed.delete', '删除')}
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Content */}

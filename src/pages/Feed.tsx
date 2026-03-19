@@ -52,6 +52,10 @@ export default function Feed() {
     }
   };
 
+  const handleDelete = (postId: number) => {
+    setPosts(prev => prev.filter(p => p.id !== postId));
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-8">
       <div className="container mx-auto px-4">
@@ -87,6 +91,7 @@ export default function Feed() {
                 post={post}
                 onLike={() => handleLike(post.id)}
                 onUnlike={() => handleUnlike(post.id)}
+                onDelete={() => handleDelete(post.id)}
               />
             ))}
 

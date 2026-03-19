@@ -33,6 +33,7 @@ function App() {
           <Route path="reports" element={<Reports />} />
           <Route element={<ProtectedRoute />}>
               <Route path="posts/new" element={<PostEditor />} />
+              <Route path="posts/:id/edit" element={<PostEditor />} />
               <Route path="profile" element={<Profile />} />
               <Route path="reports/new" element={<CreateReport />} />
               <Route path="applications" element={<Applications />} />

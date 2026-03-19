@@ -1,7 +1,7 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Send, Loader2, Image as ImageIcon, X } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import postService, { type PostCreate } from '../services/postService';
 import ReactMarkdown from 'react-markdown';
@@ -9,14 +9,41 @@ import ReactMarkdown from 'react-markdown';
 export default function PostEditor() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
+  const [searchParams] = useSearchParams();
+  const isEditMode = !!id || searchParams.get('edit') === 'true';
+  const postId = id ? parseInt(id) : null;
+  
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
+  const [existingMedia, setExistingMedia] = useState<{ id: number; url: string }[]>([]);
   const [showPreview, setShowPreview] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(!!postId);
   const [error, setError] = useState('');
+
+  // Load existing post if editing
+  useEffect(() => {
+    const loadPost = async () => {
+      if (!postId) return;
+      try {
+        setInitialLoading(true);
+        const post = await postService.getPost(postId);
+        setTitle(post.title || '');
+        setContent(post.content);
+        setExistingMedia(post.media.map(m => ({ id: m.id, url: m.url })));
+      } catch (err) {
+        console.error('Failed to load post:', err);
+        setError(t('feed.postEditor.loadError', 'Failed to load post'));
+      } finally {
+        setInitialLoading(false);
+      }
+    };
+    loadPost();
+  }, [postId, t]);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -36,6 +63,10 @@ export default function PostEditor() {
     });
   };
 
+  const removeExistingMedia = (mediaId: number) => {
+    setExistingMedia(prev => prev.filter(m => m.id !== mediaId));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!content.trim()) {
@@ -47,30 +78,48 @@ export default function PostEditor() {
       setLoading(true);
       setError('');
       
-      // 1. Create Post
       const postData: PostCreate = {
         content: content.trim(),
       };
       if (title.trim()) {
         postData.title = title.trim();
       }
-      const newPost = await postService.createPost(postData);
 
-      // 2. Upload Media if any
+      let targetPostId: number;
+      
+      if (postId) {
+        // Update existing post
+        await postService.updatePost(postId, postData);
+        targetPostId = postId;
+      } else {
+        // Create new post
+        const newPost = await postService.createPost(postData);
+        targetPostId = newPost.id;
+      }
+
+      // Upload new media if any
       if (selectedFiles.length > 0) {
         await Promise.all(
-          selectedFiles.map((file) => postService.uploadMedia(newPost.id, file))
+          selectedFiles.map((file) => postService.uploadMedia(targetPostId, file))
         );
       }
 
-      navigate(`/posts/${newPost.id}`);
+      navigate(`/posts/${targetPostId}`);
     } catch (err: any) {
       console.error(err);
-      setError(err.response?.data?.detail || 'Failed to create post');
+      setError(err.response?.data?.detail || (postId ? 'Failed to update post' : 'Failed to create post'));
     } finally {
       setLoading(false);
     }
   };
+
+  if (initialLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center">
+        <Loader2 className="w-8 h-8 text-amber-500 animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-8">
@@ -101,7 +150,7 @@ export default function PostEditor() {
             className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6"
           >
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
-              {t('feed.postEditor.title')}
+              {isEditMode ? t('feed.postEditor.editTitle', '编辑动态') : t('feed.postEditor.title')}
             </h1>
 
             {error && (
@@ -207,6 +256,31 @@ export default function PostEditor() {
                     ))}
                   </div>
                 )}
+                
+                {/* Existing media (edit mode) */}
+                {existingMedia.length > 0 && (
+                  <div className="mt-4">
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">{t('feed.postEditor.existingImages', '已上传的图片')}</p>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      {existingMedia.map((media) => (
+                        <div key={media.id} className="relative group aspect-square">
+                          <img
+                            src={media.url}
+                            alt="Existing media"
+                            className="w-full h-full object-cover rounded-lg border border-gray-200 dark:border-gray-700"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => removeExistingMedia(media.id)}
+                            className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                          >
+                            <X className="w-4 h-4" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Actions */}
@@ -227,12 +301,12 @@ export default function PostEditor() {
                   {loading ? (
                     <>
                       <Loader2 className="w-5 h-5 animate-spin" />
-                      <span>{t('feed.postEditor.posting')}</span>
+                      <span>{isEditMode ? t('feed.postEditor.updating', '更新中...') : t('feed.postEditor.posting')}</span>
                     </>
                   ) : (
                     <>
                       <Send className="w-5 h-5" />
-                      <span>{t('feed.postEditor.publish')}</span>
+                      <span>{isEditMode ? t('feed.postEditor.update', '更新') : t('feed.postEditor.publish')}</span>
                     </>
                   )}
                 </motion.button>

@@ -25,7 +25,7 @@ interface PetState {
   toggleFavorite: (petId: string) => Promise<void>;
 }
 
-export const usePetStore = create<PetState>((set, get) => ({
+export const usePetStore = create<PetState>((set, _get) => ({
   pets: [],
   selectedPet: null,
   loading: false,

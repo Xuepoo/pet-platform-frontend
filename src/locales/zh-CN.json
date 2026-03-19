@@ -130,8 +130,14 @@
       "noPostsYet": "还没有动态，快来分享吧！",
       "loadMore": "加载更多",
       "backToFeed": "返回动态",
+      "edit": "编辑",
+      "delete": "删除",
+      "deleting": "删除中...",
+      "confirmDelete": "确定要删除这条动态吗？",
+      "confirmDeleteComment": "确定要删除这条评论吗？",
       "postEditor": {
         "title": "发布新动态",
+        "editTitle": "编辑动态",
         "titlePlaceholder": "给你的动态起个标题...",
         "titleLabel": "标题",
         "optional": "可选",
@@ -141,14 +147,18 @@
         "markdownSupport": "支持 Markdown 格式，可使用 **粗体**、*斜体*、# 标题、列表等！",
         "cancel": "取消",
         "publish": "发布动态",
+        "update": "更新",
+        "updating": "更新中...",
         "posting": "发布中...",
         "edit": "编辑",
         "preview": "预览",
         "noContent": "*暂无内容*",
         "markdownGuide": "Markdown 快速参考",
         "contentRequired": "内容不能为空",
+        "loadError": "加载动态失败",
         "images": "图片",
-        "addImage": "添加图片"
+        "addImage": "添加图片",
+        "existingImages": "已上传的图片"
       },
       "postDetail": {
         "notFound": "动态不存在",
@@ -171,7 +181,10 @@
       "lost": "走失",
       "found": "发现",
       "resolved": "已解决",
-      "open": "进行中"
+      "open": "进行中",
+      "unknown": "未知时间",
+      "reporter": "发布者",
+      "anonymous": "匿名用户"
     },
     "applications": {
       "title": "我的领养申请",

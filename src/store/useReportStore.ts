@@ -1,8 +1,14 @@
 import { create } from 'zustand';
 import api from '../services/api';
 
+export interface ReportAuthor {
+  id: number;
+  full_name?: string;
+  avatar?: string;
+}
+
 export interface Report {
-  id: string;
+  id: number;
   report_type: 'lost' | 'found';
   pet_name: string;
   description: string;
@@ -10,8 +16,10 @@ export interface Report {
   contact_info: string;
   image_url?: string;
   status: 'open' | 'resolved';
-  created_at: string;
-  user_id: string;
+  created_at?: string;
+  updated_at?: string;
+  user_id: number;
+  author?: ReportAuthor;
 }
 
 interface ReportState {
@@ -19,10 +27,10 @@ interface ReportState {
   myReports: Report[];
   loading: boolean;
   error: string | null;
-  createReport: (reportData: Omit<Report, 'id' | 'status' | 'created_at' | 'user_id'>) => Promise<void>;
+  createReport: (reportData: Omit<Report, 'id' | 'status' | 'created_at' | 'user_id' | 'author' | 'updated_at'>) => Promise<void>;
   fetchReports: (filters?: Record<string, unknown>) => Promise<void>;
   fetchMyReports: () => Promise<void>;
-  resolveReport: (reportId: string) => Promise<void>;
+  resolveReport: (reportId: number) => Promise<void>;
 }
 
 export const useReportStore = create<ReportState>((set) => ({

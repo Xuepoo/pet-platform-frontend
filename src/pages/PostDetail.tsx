@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Heart, MessageCircle, Send, User, Loader2 } from 'lucide-react';
-import { Link, useParams } from 'react-router-dom';
+import { ArrowLeft, Heart, MessageCircle, Send, User, Loader2, MoreHorizontal, Edit2, Trash2 } from 'lucide-react';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
 import { formatDistanceToNow } from 'date-fns';
@@ -11,11 +11,26 @@ import { useAuthStore } from '../store/useAuthStore';
 export default function PostDetailPage() {
   const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const { user } = useAuthStore();
   const [post, setPost] = useState<PostDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [commentText, setCommentText] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [showPostMenu, setShowPostMenu] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const postMenuRef = useRef<HTMLDivElement>(null);
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (postMenuRef.current && !postMenuRef.current.contains(event.target as Node)) {
+        setShowPostMenu(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   useEffect(() => {
     loadPost();
@@ -57,6 +72,35 @@ export default function PostDetailPage() {
     }
   };
 
+  const handleEditPost = () => {
+    if (post) {
+      setShowPostMenu(false);
+      navigate(`/posts/${post.id}/edit`);
+    }
+  };
+
+  const handleDeletePost = async () => {
+    if (!post || !confirm(t('feed.confirmDelete', '确定要删除这条动态吗？'))) return;
+    try {
+      setDeleting(true);
+      await postService.deletePost(post.id);
+      navigate('/feed');
+    } catch (error) {
+      console.error('Failed to delete post:', error);
+      setDeleting(false);
+    }
+  };
+
+  const handleDeleteComment = async (commentId: number) => {
+    if (!confirm(t('feed.confirmDeleteComment', '确定要删除这条评论吗？'))) return;
+    try {
+      await postService.deleteComment(commentId);
+      await loadPost();
+    } catch (error) {
+      console.error('Failed to delete comment:', error);
+    }
+  };
+
   const handleCommentSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!commentText.trim() || !post) return;
@@ -75,7 +119,21 @@ export default function PostDetailPage() {
   };
 
   const CommentComponent = ({ comment }: { comment: Comment }) => {
+    const [showMenu, setShowMenu] = useState(false);
+    const menuRef = useRef<HTMLDivElement>(null);
+    // Compare as strings to handle type mismatch
+    const isOwner = user?.id?.toString() === comment.author_id?.toString();
     const timeAgo = formatDistanceToNow(new Date(comment.created_at), { addSuffix: true });
+
+    useEffect(() => {
+      const handleClickOutside = (event: MouseEvent) => {
+        if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+          setShowMenu(false);
+        }
+      };
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
 
     return (
       <motion.div
@@ -96,11 +154,34 @@ export default function PostDetailPage() {
             </div>
           )}
           <div className="flex-1">
-            <div className="flex items-center gap-2 mb-1">
-              <span className="font-semibold text-gray-900 dark:text-white text-sm">
-                {comment.author.full_name || 'Anonymous'}
-              </span>
-              <span className="text-xs text-gray-500 dark:text-gray-400">{timeAgo}</span>
+            <div className="flex items-center justify-between mb-1">
+              <div className="flex items-center gap-2">
+                <span className="font-semibold text-gray-900 dark:text-white text-sm">
+                  {comment.author.full_name || 'Anonymous'}
+                </span>
+                <span className="text-xs text-gray-500 dark:text-gray-400">{timeAgo}</span>
+              </div>
+              {isOwner && (
+                <div className="relative" ref={menuRef}>
+                  <button
+                    onClick={() => setShowMenu(!showMenu)}
+                    className="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full transition-colors"
+                  >
+                    <MoreHorizontal className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                  </button>
+                  {showMenu && (
+                    <div className="absolute right-0 mt-1 w-32 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-10">
+                      <button
+                        onClick={() => handleDeleteComment(comment.id)}
+                        className="w-full px-3 py-1.5 text-left text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center gap-2"
+                      >
+                        <Trash2 className="w-3 h-3" />
+                        {t('feed.delete', '删除')}
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
             <p className="text-gray-700 dark:text-gray-300 text-sm whitespace-pre-wrap">
               {comment.content}
@@ -169,24 +250,57 @@ export default function PostDetailPage() {
             className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden mb-6"
           >
             {/* Author */}
-            <div className="p-6 flex items-center gap-3 border-b border-gray-100 dark:border-gray-700">
-              {post.author.avatar ? (
-                <img
-                  src={post.author.avatar}
-                  alt={post.author.full_name || 'User'}
-                  className="w-12 h-12 rounded-full object-cover"
-                />
-              ) : (
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center">
-                  <User className="w-6 h-6 text-white" />
+            <div className="p-6 flex items-center justify-between border-b border-gray-100 dark:border-gray-700">
+              <div className="flex items-center gap-3">
+                {post.author.avatar ? (
+                  <img
+                    src={post.author.avatar}
+                    alt={post.author.full_name || 'User'}
+                    className="w-12 h-12 rounded-full object-cover"
+                  />
+                ) : (
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center">
+                    <User className="w-6 h-6 text-white" />
+                  </div>
+                )}
+                <div>
+                  <p className="font-semibold text-gray-900 dark:text-white">
+                    {post.author.full_name || 'Anonymous'}
+                  </p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">{timeAgo}</p>
+                </div>
+              </div>
+              
+              {/* Post Menu */}
+              {user?.id?.toString() === post.author_id?.toString() && (
+                <div className="relative" ref={postMenuRef}>
+                  <button
+                    onClick={() => setShowPostMenu(!showPostMenu)}
+                    className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-colors"
+                  >
+                    <MoreHorizontal className="w-5 h-5 text-gray-500 dark:text-gray-400" />
+                  </button>
+                  {showPostMenu && (
+                    <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-10">
+                      <button
+                        onClick={handleEditPost}
+                        className="w-full px-4 py-2 text-left text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-2"
+                      >
+                        <Edit2 className="w-4 h-4" />
+                        {t('feed.edit', '编辑')}
+                      </button>
+                      <button
+                        onClick={handleDeletePost}
+                        disabled={deleting}
+                        className="w-full px-4 py-2 text-left text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center gap-2 disabled:opacity-50"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                        {deleting ? t('feed.deleting', '删除中...') : t('feed.delete', '删除')}
+                      </button>
+                    </div>
+                  )}
                 </div>
               )}
-              <div>
-                <p className="font-semibold text-gray-900 dark:text-white">
-                  {post.author.full_name || 'Anonymous'}
-                </p>
-                <p className="text-sm text-gray-500 dark:text-gray-400">{timeAgo}</p>
-              </div>
             </div>
 
             {/* Content */}

@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useReportStore } from '../store/useReportStore';
 import { useAuthStore } from '../store/useAuthStore';
-import { MapPin, AlertCircle, CheckCircle, Search, Plus, Filter } from 'lucide-react';
+import { MapPin, AlertCircle, CheckCircle, Search, Plus, Filter, User, Phone } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { formatDistanceToNow } from 'date-fns';
 
 const Reports = () => {
   const { t } = useTranslation();
@@ -131,9 +132,39 @@ const Reports = () => {
                     )}
                   </div>
                   <div className="text-sm text-gray-500 dark:text-gray-400">
-                    {new Date(report.created_at).toLocaleDateString()}
+                    {report.created_at ? formatDistanceToNow(new Date(report.created_at), { addSuffix: true }) : t('reports.unknown')}
                   </div>
                 </div>
+
+                {/* Author Info */}
+                {report.author && (
+                  <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                    <div className="flex items-center gap-3">
+                      {report.author.avatar ? (
+                        <img 
+                          src={report.author.avatar} 
+                          alt={report.author.full_name || t('reports.reporter')}
+                          className="w-8 h-8 rounded-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center">
+                          <User className="w-4 h-4 text-white" />
+                        </div>
+                      )}
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-gray-900 dark:text-white">
+                          {report.author.full_name || t('reports.anonymous')}
+                        </p>
+                        {report.contact_info && (
+                          <p className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1">
+                            <Phone className="w-3 h-3" />
+                            {report.contact_info}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           ))}
