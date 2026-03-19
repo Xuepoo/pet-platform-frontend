@@ -151,6 +151,21 @@
         "writeComment": "コメントを書く...",
         "comment": "コメント"
       }
+    },
+    "reports": {
+      "title": "迷子・保護情報",
+      "subtitle": "ペットと飼い主の再会をお手伝い",
+      "search": "名前、場所、説明で検索...",
+      "allReports": "すべて",
+      "lostPets": "迷子ペット",
+      "foundPets": "保護ペット",
+      "reportButton": "迷子・保護情報を投稿",
+      "noReports": "該当する情報がありません",
+      "adjustFilters": "検索条件を調整してください",
+      "lost": "迷子",
+      "found": "保護",
+      "resolved": "解決済み",
+      "open": "対応中"
     }
   }
 }

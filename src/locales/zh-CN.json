@@ -151,6 +151,21 @@
         "writeComment": "写下你的评论...",
         "comment": "评论"
       }
+    },
+    "reports": {
+      "title": "寻宠启示",
+      "subtitle": "帮助宠物与主人团聚",
+      "search": "搜索名称、位置或描述...",
+      "allReports": "全部",
+      "lostPets": "走失宠物",
+      "foundPets": "发现宠物",
+      "reportButton": "发布寻宠启示",
+      "noReports": "未找到相关记录",
+      "adjustFilters": "尝试调整搜索或筛选条件",
+      "lost": "走失",
+      "found": "发现",
+      "resolved": "已解决",
+      "open": "进行中"
     }
   }
 }

@@ -151,6 +151,21 @@
         "writeComment": "Write a comment...",
         "comment": "Comment"
       }
+    },
+    "reports": {
+      "title": "Lost & Found",
+      "subtitle": "Help reunite pets with their owners",
+      "search": "Search by name, location, or description...",
+      "allReports": "All Reports",
+      "lostPets": "Lost Pets",
+      "foundPets": "Found Pets",
+      "reportButton": "Report Lost/Found Pet",
+      "noReports": "No reports found",
+      "adjustFilters": "Try adjusting your search or filters",
+      "lost": "Lost",
+      "found": "Found",
+      "resolved": "Resolved",
+      "open": "Open"
     }
   }
 }

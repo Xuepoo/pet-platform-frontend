@@ -151,6 +151,21 @@
         "writeComment": "寫下你的評論...",
         "comment": "評論"
       }
+    },
+    "reports": {
+      "title": "尋寵啟示",
+      "subtitle": "幫助寵物與主人團聚",
+      "search": "搜尋名稱、位置或描述...",
+      "allReports": "全部",
+      "lostPets": "走失寵物",
+      "foundPets": "發現寵物",
+      "reportButton": "發佈尋寵啟示",
+      "noReports": "未找到相關記錄",
+      "adjustFilters": "嘗試調整搜尋或篩選條件",
+      "lost": "走失",
+      "found": "發現",
+      "resolved": "已解決",
+      "open": "進行中"
     }
   }
 }
