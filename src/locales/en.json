@@ -12,6 +12,32 @@
     "Admin": "Admin",
     "Theme": "Theme",
     "Language": "Language",
+    "Feed": "Feed",
+    "home": {
+      "hero": {
+        "titlePart1": "Find Your Perfect",
+        "titlePart2": "Companion Today",
+        "description": "Give a loving home to a pet in need. Browse our available pets and start your adoption journey today.",
+        "browseBtn": "Browse Pets",
+        "joinBtn": "Join Us"
+      },
+      "featured": {
+        "title": "Featured Pets",
+        "subtitle": "Meet some of our newest friends looking for a forever home.",
+        "meetBtn": "Meet",
+        "viewAll": "View all available pets"
+      }
+    },
+    "login": {
+      "title": "Sign in to your account",
+      "subtitle": "Don't have an account?",
+      "signup": "Sign up",
+      "email": "Email address",
+      "password": "Password",
+      "submit": "Sign in",
+      "loading": "Signing in...",
+      "error": "Invalid email or password"
+    },
     "about": {
       "title": "About Us",
       "subtitle": "Connecting pets with loving homes and reuniting families.",
@@ -76,6 +102,55 @@
       "avatar": "Avatar",
       "upload_avatar": "Upload Avatar",
       "uploading": "Uploading..."
+    },
+    "pets": {
+      "title": "Find Your New Friend",
+      "subtitle": "Browse our available pets looking for a loving home.",
+      "search": "Search pets...",
+      "filter": {
+        "all": "All",
+        "dogs": "Dogs",
+        "cats": "Cats",
+        "birds": "Birds",
+        "other": "Other"
+      },
+      "available": "Available",
+      "adopted": "Adopted",
+      "pending": "Pending",
+      "learnMore": "Learn More"
+    },
+    "feed": {
+      "title": "Pet Community",
+      "newPost": "New Post",
+      "createFirst": "Create Your First Post",
+      "noPostsYet": "No posts yet. Be the first to share!",
+      "loadMore": "Load More",
+      "backToFeed": "Back to Feed",
+      "postEditor": {
+        "title": "Create New Post",
+        "titlePlaceholder": "Give your post a catchy title...",
+        "titleLabel": "Title",
+        "optional": "optional",
+        "contentLabel": "Content",
+        "required": "*",
+        "contentPlaceholder": "Share your pet story, tips, or experiences... (Markdown supported)",
+        "markdownSupport": "Markdown is supported. Use **bold**, *italic*, # Headers, lists, and more!",
+        "cancel": "Cancel",
+        "publish": "Publish Post",
+        "posting": "Posting...",
+        "edit": "Edit",
+        "preview": "Preview",
+        "noContent": "*No content yet*",
+        "markdownGuide": "Markdown Quick Reference",
+        "contentRequired": "Content is required"
+      },
+      "postDetail": {
+        "notFound": "Post not found",
+        "comments": "Comments",
+        "noComments": "No comments yet. Be the first to comment!",
+        "writeComment": "Write a comment...",
+        "comment": "Comment"
+      }
     }
   }
 }

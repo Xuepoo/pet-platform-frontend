@@ -93,21 +93,21 @@ const Register = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8 min-h-screen bg-gray-50">
+    <div className="flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8 min-h-screen">
       <Card 
-        className="max-w-md w-full space-y-8 p-8"
+        className="max-w-md w-full space-y-8 p-8 bg-white dark:bg-gray-800"
         variants={slideUp}
         initial="initial"
         animate="animate"
         exit="exit"
       >
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-white">
             {t('register.title')}
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
+          <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
             {t('register.subtitle')}{' '}
-            <Link to="/login" className="font-medium text-indigo-600 hover:text-indigo-500 transition-colors">
+            <Link to="/login" className="font-medium text-amber-500 hover:text-amber-400 transition-colors">
               {t('register.signin')}
             </Link>
           </p>

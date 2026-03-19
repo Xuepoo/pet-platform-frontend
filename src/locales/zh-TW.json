@@ -2,11 +2,155 @@
   "translation": {
     "Home": "首頁",
     "About Us": "關於我們",
+    "Find a Pet": "尋找寵物",
+    "Lost & Found": "尋寵啟事",
+    "My Applications": "我的申請",
+    "Logout": "退出登錄",
     "Login": "登錄",
     "Register": "註冊",
-    "Profile": "個人中心",
+    "Profile": "個人資料",
     "Admin": "管理後台",
     "Theme": "主題",
-    "Language": "語言"
+    "Language": "語言",
+    "Feed": "動態",
+    "home": {
+      "hero": {
+        "titlePart1": "找到你的完美",
+        "titlePart2": "寵物夥伴",
+        "description": "給需要關愛的寵物一個溫暖的家。瀏覽我們的可領養寵物，開啟你的領養之旅。",
+        "browseBtn": "瀏覽寵物",
+        "joinBtn": "加入我們"
+      },
+      "featured": {
+        "title": "精選寵物",
+        "subtitle": "認識一些正在尋找永久家庭的新朋友。",
+        "meetBtn": "認識",
+        "viewAll": "查看所有可領養寵物"
+      }
+    },
+    "login": {
+      "title": "登錄您的賬戶",
+      "subtitle": "還沒有賬戶？",
+      "signup": "註冊",
+      "email": "郵箱地址",
+      "password": "密碼",
+      "submit": "登錄",
+      "loading": "登錄中...",
+      "error": "郵箱或密碼錯誤"
+    },
+    "about": {
+      "title": "關於我們",
+      "subtitle": "為每一隻寵物尋找溫暖的家，幫助走失的寵物團聚。",
+      "mission": {
+        "title": "我們的使命",
+        "description": "在寵物平台，我們相信每一隻寵物都值得擁有一個充滿愛的家。我們的使命是簡化領養流程，並提供一個可靠的尋寵平台。"
+      },
+      "team": {
+        "title": "團隊介紹",
+        "member1": { "name": "Sarah Johnson", "role": "創始人 & CEO" },
+        "member2": { "name": "Michael Chen", "role": "運營總監" },
+        "member3": { "name": "Emily Rodriguez", "role": "社區經理" }
+      },
+      "contact": {
+        "title": "聯繫我們"
+      }
+    },
+    "admin": {
+      "dashboard": "管理儀表盤",
+      "users": "用戶管理",
+      "id": "ID",
+      "email": "郵箱",
+      "name": "姓名",
+      "active": "狀態",
+      "inactive": "禁用",
+      "superuser": "管理員",
+      "actions": "操作",
+      "delete": "刪除",
+      "toggle_active": "切換狀態",
+      "confirm_delete": "確定要刪除此用戶嗎？"
+    },
+    "register": {
+      "title": "創建賬戶",
+      "subtitle": "已有賬戶？",
+      "signin": "登錄",
+      "name": "全名",
+      "email": "郵箱地址",
+      "password": "密碼",
+      "confirmPassword": "確認密碼",
+      "submit": "註冊",
+      "loading": "註冊中...",
+      "passwordStrength": "密碼強度",
+      "weak": "弱",
+      "medium": "中",
+      "strong": "強",
+      "errors": {
+        "mismatch": "兩次輸入的密碼不一致",
+        "weak": "密碼長度至少需8個字符",
+        "generic": "註冊失敗，請重試。"
+      }
+    },
+    "profile": {
+      "title": "個人資料",
+      "edit": "編輯資料",
+      "save": "保存更改",
+      "cancel": "取消",
+      "name": "全名",
+      "email": "郵箱",
+      "age": "年齡",
+      "gender": "性別",
+      "bio": "簡介",
+      "avatar": "頭像",
+      "upload_avatar": "上傳頭像",
+      "uploading": "上傳中..."
+    },
+    "pets": {
+      "title": "尋找你的新朋友",
+      "subtitle": "瀏覽我們正在尋找愛心家庭的可愛寵物。",
+      "search": "搜索寵物...",
+      "filter": {
+        "all": "全部",
+        "dogs": "狗狗",
+        "cats": "貓咪",
+        "birds": "鳥類",
+        "other": "其他"
+      },
+      "available": "可領養",
+      "adopted": "已領養",
+      "pending": "待定",
+      "learnMore": "了解更多"
+    },
+    "feed": {
+      "title": "寵物社區",
+      "newPost": "發布動態",
+      "createFirst": "發布你的第一條動態",
+      "noPostsYet": "還沒有動態，快來分享吧！",
+      "loadMore": "載入更多",
+      "backToFeed": "返回動態",
+      "postEditor": {
+        "title": "發布新動態",
+        "titlePlaceholder": "給你的動態起個標題...",
+        "titleLabel": "標題",
+        "optional": "可選",
+        "contentLabel": "內容",
+        "required": "*",
+        "contentPlaceholder": "分享你的寵物故事、經驗或心得...（支持 Markdown）",
+        "markdownSupport": "支持 Markdown 格式，可使用 **粗體**、*斜體*、# 標題、列表等！",
+        "cancel": "取消",
+        "publish": "發布動態",
+        "posting": "發布中...",
+        "edit": "編輯",
+        "preview": "預覽",
+        "noContent": "*暫無內容*",
+        "markdownGuide": "Markdown 快速參考",
+        "contentRequired": "內容不能為空"
+      },
+      "postDetail": {
+        "notFound": "動態不存在",
+        "comments": "評論",
+        "noComments": "還沒有評論，快來搶沙發！",
+        "writeComment": "寫下你的評論...",
+        "comment": "評論"
+      }
+    }
   }
 }

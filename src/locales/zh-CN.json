@@ -2,11 +2,155 @@
   "translation": {
     "Home": "首页",
     "About Us": "关于我们",
+    "Find a Pet": "寻找宠物",
+    "Lost & Found": "寻宠启事",
+    "My Applications": "我的申请",
+    "Logout": "退出登录",
     "Login": "登录",
     "Register": "注册",
-    "Profile": "个人中心",
+    "Profile": "个人资料",
     "Admin": "管理后台",
     "Theme": "主题",
-    "Language": "语言"
+    "Language": "语言",
+    "Feed": "动态",
+    "home": {
+      "hero": {
+        "titlePart1": "找到你的完美",
+        "titlePart2": "宠物伙伴",
+        "description": "给需要关爱的宠物一个温暖的家。浏览我们的可领养宠物，开启你的领养之旅。",
+        "browseBtn": "浏览宠物",
+        "joinBtn": "加入我们"
+      },
+      "featured": {
+        "title": "精选宠物",
+        "subtitle": "认识一些正在寻找永久家庭的新朋友。",
+        "meetBtn": "认识",
+        "viewAll": "查看所有可领养宠物"
+      }
+    },
+    "login": {
+      "title": "登录您的账户",
+      "subtitle": "还没有账户？",
+      "signup": "注册",
+      "email": "邮箱地址",
+      "password": "密码",
+      "submit": "登录",
+      "loading": "登录中...",
+      "error": "邮箱或密码错误"
+    },
+    "about": {
+      "title": "关于我们",
+      "subtitle": "为每一只宠物寻找温暖的家，帮助走失的宠物团聚。",
+      "mission": {
+        "title": "我们的使命",
+        "description": "在宠物平台，我们相信每一只宠物都值得拥有一个充满爱的家。我们的使命是简化领养流程，并提供一个可靠的寻宠平台。"
+      },
+      "team": {
+        "title": "团队介绍",
+        "member1": { "name": "Sarah Johnson", "role": "创始人 & CEO" },
+        "member2": { "name": "Michael Chen", "role": "运营总监" },
+        "member3": { "name": "Emily Rodriguez", "role": "社区经理" }
+      },
+      "contact": {
+        "title": "联系我们"
+      }
+    },
+    "admin": {
+      "dashboard": "管理仪表盘",
+      "users": "用户管理",
+      "id": "ID",
+      "email": "邮箱",
+      "name": "姓名",
+      "active": "状态",
+      "inactive": "禁用",
+      "superuser": "管理员",
+      "actions": "操作",
+      "delete": "删除",
+      "toggle_active": "切换状态",
+      "confirm_delete": "确定要删除此用户吗？"
+    },
+    "register": {
+      "title": "创建账户",
+      "subtitle": "已有账户？",
+      "signin": "登录",
+      "name": "全名",
+      "email": "邮箱地址",
+      "password": "密码",
+      "confirmPassword": "确认密码",
+      "submit": "注册",
+      "loading": "注册中...",
+      "passwordStrength": "密码强度",
+      "weak": "弱",
+      "medium": "中",
+      "strong": "强",
+      "errors": {
+        "mismatch": "两次输入的密码不一致",
+        "weak": "密码长度至少需8个字符",
+        "generic": "注册失败，请重试。"
+      }
+    },
+    "profile": {
+      "title": "个人资料",
+      "edit": "编辑资料",
+      "save": "保存更改",
+      "cancel": "取消",
+      "name": "全名",
+      "email": "邮箱",
+      "age": "年龄",
+      "gender": "性别",
+      "bio": "简介",
+      "avatar": "头像",
+      "upload_avatar": "上传头像",
+      "uploading": "上传中..."
+    },
+    "pets": {
+      "title": "寻找你的新朋友",
+      "subtitle": "浏览我们正在寻找爱心家庭的可爱宠物。",
+      "search": "搜索宠物...",
+      "filter": {
+        "all": "全部",
+        "dogs": "狗狗",
+        "cats": "猫咪",
+        "birds": "鸟类",
+        "other": "其他"
+      },
+      "available": "可领养",
+      "adopted": "已领养",
+      "pending": "待定",
+      "learnMore": "了解更多"
+    },
+    "feed": {
+      "title": "宠物社区",
+      "newPost": "发布动态",
+      "createFirst": "发布你的第一条动态",
+      "noPostsYet": "还没有动态，快来分享吧！",
+      "loadMore": "加载更多",
+      "backToFeed": "返回动态",
+      "postEditor": {
+        "title": "发布新动态",
+        "titlePlaceholder": "给你的动态起个标题...",
+        "titleLabel": "标题",
+        "optional": "可选",
+        "contentLabel": "内容",
+        "required": "*",
+        "contentPlaceholder": "分享你的宠物故事、经验或心得...（支持 Markdown）",
+        "markdownSupport": "支持 Markdown 格式，可使用 **粗体**、*斜体*、# 标题、列表等！",
+        "cancel": "取消",
+        "publish": "发布动态",
+        "posting": "发布中...",
+        "edit": "编辑",
+        "preview": "预览",
+        "noContent": "*暂无内容*",
+        "markdownGuide": "Markdown 快速参考",
+        "contentRequired": "内容不能为空"
+      },
+      "postDetail": {
+        "notFound": "动态不存在",
+        "comments": "评论",
+        "noComments": "还没有评论，快来抢沙发！",
+        "writeComment": "写下你的评论...",
+        "comment": "评论"
+      }
+    }
   }
 }

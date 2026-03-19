@@ -2,11 +2,155 @@
   "translation": {
     "Home": "ホーム",
     "About Us": "私たちについて",
+    "Find a Pet": "ペットを探す",
+    "Lost & Found": "迷子・保護情報",
+    "My Applications": "申し込み履歴",
+    "Logout": "ログアウト",
     "Login": "ログイン",
     "Register": "登録",
     "Profile": "プロフィール",
-    "Admin": "管理画面",
+    "Admin": "管理",
     "Theme": "テーマ",
-    "Language": "言語"
+    "Language": "言語",
+    "Feed": "タイムライン",
+    "home": {
+      "hero": {
+        "titlePart1": "あなたの理想の",
+        "titlePart2": "パートナーを見つけよう",
+        "description": "愛を必要としているペットに温かい家庭を。里親募集中のペットを見て、今日から養子縁組の旅を始めましょう。",
+        "browseBtn": "ペットを見る",
+        "joinBtn": "参加する"
+      },
+      "featured": {
+        "title": "注目のペット",
+        "subtitle": "新しい家族を待っている仲間たちを紹介します。",
+        "meetBtn": "会う",
+        "viewAll": "すべてのペットを見る"
+      }
+    },
+    "login": {
+      "title": "アカウントにログイン",
+      "subtitle": "アカウントをお持ちでない方は",
+      "signup": "登録",
+      "email": "メールアドレス",
+      "password": "パスワード",
+      "submit": "ログイン",
+      "loading": "ログイン中...",
+      "error": "メールまたはパスワードが正しくありません"
+    },
+    "about": {
+      "title": "私たちについて",
+      "subtitle": "ペットと温かい家庭を結び、家族の再会を支援します。",
+      "mission": {
+        "title": "ミッション",
+        "description": "すべてのペットには愛される権利があります。私たちのミッションは、養子縁組プロセスを簡素化し、信頼できる迷子探しプラットフォームを提供することです。"
+      },
+      "team": {
+        "title": "チーム",
+        "member1": { "name": "Sarah Johnson", "role": "創業者 & CEO" },
+        "member2": { "name": "Michael Chen", "role": "オペレーション責任者" },
+        "member3": { "name": "Emily Rodriguez", "role": "コミュニティマネージャー" }
+      },
+      "contact": {
+        "title": "お問い合わせ"
+      }
+    },
+    "admin": {
+      "dashboard": "管理ダッシュボード",
+      "users": "ユーザー",
+      "id": "ID",
+      "email": "メール",
+      "name": "名前",
+      "active": "ステータス",
+      "inactive": "無効",
+      "superuser": "管理者",
+      "actions": "操作",
+      "delete": "削除",
+      "toggle_active": "ステータス変更",
+      "confirm_delete": "このユーザーを削除してもよろしいですか？"
+    },
+    "register": {
+      "title": "アカウント作成",
+      "subtitle": "アカウントをお持ちですか？",
+      "signin": "ログイン",
+      "name": "氏名",
+      "email": "メールアドレス",
+      "password": "パスワード",
+      "confirmPassword": "パスワード（確認）",
+      "submit": "登録",
+      "loading": "登録中...",
+      "passwordStrength": "パスワード強度",
+      "weak": "弱い",
+      "medium": "普通",
+      "strong": "強い",
+      "errors": {
+        "mismatch": "パスワードが一致しません",
+        "weak": "パスワードは8文字以上である必要があります",
+        "generic": "登録に失敗しました。再試行してください。"
+      }
+    },
+    "profile": {
+      "title": "プロフィール",
+      "edit": "編集",
+      "save": "保存",
+      "cancel": "キャンセル",
+      "name": "氏名",
+      "email": "メール",
+      "age": "年齢",
+      "gender": "性別",
+      "bio": "自己紹介",
+      "avatar": "アバター",
+      "upload_avatar": "アバターをアップロード",
+      "uploading": "アップロード中..."
+    },
+    "pets": {
+      "title": "新しい友達を見つけよう",
+      "subtitle": "愛情あふれる家庭を待っているペットたち。",
+      "search": "ペットを検索...",
+      "filter": {
+        "all": "すべて",
+        "dogs": "犬",
+        "cats": "猫",
+        "birds": "鳥",
+        "other": "その他"
+      },
+      "available": "募集中",
+      "adopted": "決定済み",
+      "pending": "保留中",
+      "learnMore": "詳しく見る"
+    },
+    "feed": {
+      "title": "ペットコミュニティ",
+      "newPost": "投稿する",
+      "createFirst": "最初の投稿をしよう",
+      "noPostsYet": "まだ投稿がありません。最初の一人になろう！",
+      "loadMore": "もっと見る",
+      "backToFeed": "タイムラインに戻る",
+      "postEditor": {
+        "title": "新しい投稿",
+        "titlePlaceholder": "タイトルをつけよう...",
+        "titleLabel": "タイトル",
+        "optional": "任意",
+        "contentLabel": "内容",
+        "required": "*",
+        "contentPlaceholder": "ペットの話や経験をシェアしよう...（Markdown対応）",
+        "markdownSupport": "Markdownが使えます。**太字**、*斜体*、# 見出し、リストなど！",
+        "cancel": "キャンセル",
+        "publish": "投稿する",
+        "posting": "投稿中...",
+        "edit": "編集",
+        "preview": "プレビュー",
+        "noContent": "*内容がありません*",
+        "markdownGuide": "Markdownクイックガイド",
+        "contentRequired": "内容を入力してください"
+      },
+      "postDetail": {
+        "notFound": "投稿が見つかりません",
+        "comments": "コメント",
+        "noComments": "まだコメントがありません。最初のコメントを書こう！",
+        "writeComment": "コメントを書く...",
+        "comment": "コメント"
+      }
+    }
   }
 }

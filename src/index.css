@@ -6,9 +6,9 @@
     --radius: 0.5rem;
   }
 
-  /* body {
-    @apply bg-surface text-text transition-colors duration-300;
-  } */
+  body {
+    @apply bg-white text-gray-900 transition-colors duration-300 dark:bg-gray-900 dark:text-gray-100;
+  }
 }
 
 @layer utilities {

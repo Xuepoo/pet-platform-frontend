@@ -5,7 +5,7 @@ const Card = ({ className, children, ...props }: HTMLMotionProps<"div">) => {
   return (
     <motion.div
       className={cn(
-        "bg-surface text-text rounded-xl border border-gray-200 shadow-sm p-6 overflow-hidden",
+        "bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm p-6 overflow-hidden transition-colors duration-200",
         className
       )}
       initial={{ opacity: 0, y: 20 }}

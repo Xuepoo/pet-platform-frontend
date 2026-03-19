@@ -11,6 +11,9 @@ import CreateReport from './pages/CreateReport';
 import Applications from './pages/Applications';
 import Profile from './pages/Profile';
 import AdminDashboard from './pages/AdminDashboard';
+import Feed from './pages/Feed';
+import PostEditor from './pages/PostEditor';
+import PostDetail from './pages/PostDetail';
 import AdminRoute from './components/AdminRoute';
 import ProtectedRoute from './components/ProtectedRoute';
 
@@ -21,12 +24,15 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="about" element={<About />} />
+          <Route path="feed" element={<Feed />} />
+          <Route path="posts/:id" element={<PostDetail />} />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
           <Route path="pets" element={<PetList />} />
           <Route path="pets/:id" element={<PetDetail />} />
           <Route path="reports" element={<Reports />} />
           <Route element={<ProtectedRoute />}>
+              <Route path="posts/new" element={<PostEditor />} />
               <Route path="profile" element={<Profile />} />
               <Route path="reports/new" element={<CreateReport />} />
               <Route path="applications" element={<Applications />} />
